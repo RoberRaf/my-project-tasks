@@ -1,6 +1,6 @@
 ---
 title: Task one
-status: todo
+status: in-progress
 claimed_by:
 claimed_at:
 ---
