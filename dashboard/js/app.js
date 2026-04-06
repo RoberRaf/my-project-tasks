@@ -60,10 +60,102 @@ function showToast(message, type) {
   setTimeout(() => toast.remove(), 3000);
 }
 
+// --- Git Pull ---
+async function handlePull() {
+  const btn = document.getElementById('pull-btn');
+  btn.disabled = true;
+  btn.textContent = 'Pulling…';
+  try {
+    const res = await fetch('/api/git/pull', { method: 'POST' });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(data.output || 'Pull successful', 'info');
+      loadBoard();
+    } else {
+      showToast('Pull failed: ' + (data.error || 'Unknown error'), 'error');
+    }
+  } catch (err) {
+    showToast('Pull failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Pull';
+  }
+}
+
+// --- Git Push (with commit dialog) ---
+function showPushDialog() {
+  const overlay = document.createElement('div');
+  overlay.className = 'push-overlay';
+  overlay.innerHTML = `
+    <div class="push-dialog">
+      <h3>Commit &amp; Push</h3>
+      <textarea id="commit-msg" placeholder="Enter commit message…"></textarea>
+      <div class="push-dialog-actions">
+        <button class="push-cancel-btn" id="push-cancel">Cancel</button>
+        <button class="push-submit-btn" id="push-submit">Commit &amp; Push</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const textarea = document.getElementById('commit-msg');
+  const submitBtn = document.getElementById('push-submit');
+  const cancelBtn = document.getElementById('push-cancel');
+
+  textarea.focus();
+
+  function close() { overlay.remove(); }
+
+  cancelBtn.addEventListener('click', close);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+  document.addEventListener('keydown', function escHandler(e) {
+    if (e.key === 'Escape') { close(); document.removeEventListener('keydown', escHandler); }
+  });
+
+  submitBtn.addEventListener('click', async () => {
+    const message = textarea.value.trim();
+    if (!message) {
+      textarea.classList.add('input-error');
+      textarea.focus();
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Pushing…';
+    try {
+      const res = await fetch('/api/git/push', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showToast('Pushed successfully', 'info');
+        close();
+      } else {
+        showToast('Push failed: ' + (data.error || 'Unknown error'), 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Commit & Push';
+      }
+    } catch (err) {
+      showToast('Push failed: ' + err.message, 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Commit & Push';
+    }
+  });
+
+  textarea.addEventListener('input', () => {
+    textarea.classList.remove('input-error');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.mode));
   });
   document.getElementById('refresh-btn').addEventListener('click', loadBoard);
+  document.getElementById('pull-btn').addEventListener('click', handlePull);
+  document.getElementById('push-btn').addEventListener('click', showPushDialog);
   loadBoard();
 });

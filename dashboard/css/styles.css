@@ -81,6 +81,113 @@ body {
   background: rgba(255,255,255,0.1);
 }
 
+#pull-btn, #push-btn {
+  padding: 6px 14px;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#pull-btn:hover, #push-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+#pull-btn:disabled, #push-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Push commit dialog */
+.push-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease;
+}
+
+.push-dialog {
+  background: #fff;
+  border-radius: 12px;
+  width: 440px;
+  max-width: 90vw;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  padding: 24px;
+}
+
+.push-dialog h3 {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+  color: #1a1a2e;
+}
+
+.push-dialog textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.push-dialog textarea:focus {
+  border-color: #2196F3;
+}
+
+.push-dialog textarea.input-error {
+  border-color: #e53935;
+}
+
+.push-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.push-dialog-actions button {
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+}
+
+.push-cancel-btn {
+  background: #eee;
+  color: #333;
+}
+
+.push-cancel-btn:hover {
+  background: #ddd;
+}
+
+.push-submit-btn {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.push-submit-btn:hover {
+  background: #2a2a4e;
+}
+
+.push-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Board */
 .board-container {
   margin-top: 56px;

@@ -3,6 +3,7 @@ const cors = require('cors');
 const yaml = require('js-yaml');
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -152,6 +153,39 @@ app.patch('/api/cycles/:filename', (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// --- Git API ---
+
+const PROJECT_ROOT = path.join(__dirname, '..');
+
+app.post('/api/git/pull', (req, res) => {
+  try {
+    const output = execSync('git pull origin main', {
+      cwd: PROJECT_ROOT,
+      encoding: 'utf-8',
+      timeout: 30000
+    });
+    res.json({ ok: true, output: output.trim() });
+  } catch (err) {
+    res.status(500).json({ error: err.stderr || err.message });
+  }
+});
+
+app.post('/api/git/push', (req, res) => {
+  try {
+    const { message } = req.body;
+    if (!message || !message.trim()) {
+      return res.status(400).json({ error: 'Commit message is required' });
+    }
+    const opts = { cwd: PROJECT_ROOT, encoding: 'utf-8', timeout: 30000 };
+    execSync('git add -A', opts);
+    execSync(`git commit -m ${JSON.stringify(message.trim())}`, opts);
+    const output = execSync('git push origin main', opts);
+    res.json({ ok: true, output: output.trim() });
+  } catch (err) {
+    res.status(500).json({ error: err.stderr || err.message });
   }
 });
 
