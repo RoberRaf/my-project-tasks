@@ -1,8 +1,8 @@
 ---
 title: Task one
-status: done
-claimed_by: RoberRaf
-claimed_at: 2026-04-04T00:00:00Z
+status: todo
+claimed_by: 
+claimed_at: 
 ---
 
 # Task details
