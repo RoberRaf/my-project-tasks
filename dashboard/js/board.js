@@ -54,7 +54,7 @@ function renderBoard(containerId, config, developers) {
 function createCard(item, column, config, developers) {
   const card = document.createElement('div');
   card.className = 'card';
-  card.draggable = true;
+  card.draggable = !window.DASHBOARD_READONLY;
   card.dataset.filename = item.filename;
   card.style.borderLeftColor = column.color;
 
@@ -128,10 +128,12 @@ function createCard(item, column, config, developers) {
     assigneeRow.innerHTML = `<span class="unassigned">Unassigned</span>`;
   }
 
-  assigneeRow.addEventListener('click', (e) => {
-    e.stopPropagation();
-    showAssignDropdown(assigneeRow, item, config, developers);
-  });
+  if (!window.DASHBOARD_READONLY) {
+    assigneeRow.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showAssignDropdown(assigneeRow, item, config, developers);
+    });
+  }
 
   const fileRef = document.createElement('div');
   fileRef.className = 'card-file';
@@ -145,13 +147,15 @@ function createCard(item, column, config, developers) {
     showDetailDialog(item, config, developers);
   });
 
-  card.addEventListener('dragstart', (e) => {
-    e.dataTransfer.setData('text/plain', item.filename);
-    card.classList.add('dragging');
-  });
-  card.addEventListener('dragend', () => {
-    card.classList.remove('dragging');
-  });
+  if (!window.DASHBOARD_READONLY) {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', item.filename);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+    });
+  }
 
   return card;
 }
@@ -163,6 +167,7 @@ function escapeHtml(str) {
 }
 
 function setupDropZone(columnBody, column, config) {
+  if (window.DASHBOARD_READONLY) return;
   columnBody.addEventListener('dragover', (e) => {
     e.preventDefault();
     columnBody.classList.add('drag-over');
@@ -363,23 +368,28 @@ function showDetailDialog(item, config, developers) {
   assigneeControl.className = 'detail-assignee-control';
   assigneeControl.style.position = 'relative';
 
+  const editHint = window.DASHBOARD_READONLY ? '' : '<span class="detail-edit-hint">click to change</span>';
+  const assignHint = window.DASHBOARD_READONLY ? '' : '<span class="detail-edit-hint">click to assign</span>';
+
   if (dev) {
     assigneeControl.innerHTML = `
       <span class="avatar" style="background:${dev.color}">${dev.name[0]}</span>
       <span>${dev.name}</span>
-      <span class="detail-edit-hint">click to change</span>
+      ${editHint}
     `;
   } else {
     assigneeControl.innerHTML = `
       <span class="unassigned">Unassigned</span>
-      <span class="detail-edit-hint">click to assign</span>
+      ${assignHint}
     `;
   }
 
-  assigneeControl.addEventListener('click', (e) => {
-    e.stopPropagation();
-    showAssignDropdown(assigneeControl, item, config, developers);
-  });
+  if (!window.DASHBOARD_READONLY) {
+    assigneeControl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showAssignDropdown(assigneeControl, item, config, developers);
+    });
+  }
 
   assigneeSection.appendChild(assigneeControl);
   dialog.appendChild(assigneeSection);

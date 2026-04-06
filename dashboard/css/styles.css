@@ -631,6 +631,22 @@ body {
   margin: 12px 0;
 }
 
+/* Read-only / static mode */
+.readonly-banner {
+  display: none;
+  background: #FFF3CD;
+  color: #856404;
+  text-align: center;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+body.readonly .readonly-banner { display: block; }
+body.readonly #pull-btn,
+body.readonly #push-btn { display: none; }
+body.readonly .card { cursor: default; }
+body.readonly .card-assignee { cursor: default; pointer-events: none; }
+body.readonly .detail-assignee-control { cursor: default; pointer-events: none; }
+
 /* Empty state */
 .empty-state {
   display: flex;
