@@ -19,6 +19,13 @@
     <button id="refresh-btn">Refresh</button>
   </div>
 
+  <div class="filter-bar">
+    <input type="search" id="search-input" class="search-input" placeholder="Search tasks…">
+    <div class="filter-separator"></div>
+    <label class="filter-label" for="assignee-filter">Assignee:</label>
+    <select id="assignee-filter" class="filter-select"></select>
+  </div>
+
   <div id="board-container" class="board-container"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

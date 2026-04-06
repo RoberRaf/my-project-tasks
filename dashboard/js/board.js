@@ -1,4 +1,4 @@
-function renderBoard(containerId, config, developers) {
+function renderBoard(containerId, config, developers, assigneeFilter, searchQuery) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
 
@@ -6,6 +6,24 @@ function renderBoard(containerId, config, developers) {
     if (!items.length) {
       container.innerHTML = `<div class="empty-state">No ${config.mode} yet</div>`;
       return;
+    }
+
+    // Apply assignee filter
+    if (assigneeFilter === '__unassigned__') {
+      items = items.filter(item => !item.claimed_by);
+    } else if (assigneeFilter) {
+      items = items.filter(item => item.claimed_by === assigneeFilter);
+    }
+
+    // Apply search filter
+    if (searchQuery) {
+      items = items.filter(item => {
+        const fields = [
+          item.title, item.body, item.filename, item.claimed_by,
+          item.status, item.killCondition, item.targetMetric
+        ];
+        return fields.some(f => f && f.toLowerCase().includes(searchQuery));
+      });
     }
 
     const columnMap = {};

@@ -35,9 +35,37 @@ const CYCLES_CONFIG = {
 };
 
 let activeConfig = TASKS_CONFIG;
+let activeAssigneeFilter = null; // null = show all, dev id string = filter
+let activeSearchQuery = '';
+let searchDebounceTimer = null;
 
 function loadBoard() {
-  renderBoard('board-container', activeConfig, DEVELOPERS);
+  renderBoard('board-container', activeConfig, DEVELOPERS, activeAssigneeFilter, activeSearchQuery);
+}
+
+function initAssigneeFilter() {
+  const select = document.getElementById('assignee-filter');
+  select.innerHTML = '';
+
+  const allOpt = new Option('All', '');
+  select.appendChild(allOpt);
+
+  const unassignedOpt = new Option('Unassigned', '__unassigned__');
+  select.appendChild(unassignedOpt);
+
+  DEVELOPERS.forEach(dev => {
+    select.appendChild(new Option(dev.name, dev.id));
+  });
+
+  select.addEventListener('change', () => {
+    activeAssigneeFilter = select.value || null;
+    loadBoard();
+  });
+}
+
+function resetAssigneeFilter() {
+  activeAssigneeFilter = null;
+  document.getElementById('assignee-filter').value = '';
 }
 
 function switchTab(mode) {
@@ -49,6 +77,11 @@ function switchTab(mode) {
   } else if (mode === 'cycles') {
     activeConfig = CYCLES_CONFIG;
   }
+  resetAssigneeFilter();
+  activeSearchQuery = '';
+  const searchInput = document.getElementById('search-input');
+  searchInput.value = '';
+  searchInput.placeholder = mode === 'cycles' ? 'Search cycles\u2026' : 'Search tasks\u2026';
   loadBoard();
 }
 
@@ -157,5 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('refresh-btn').addEventListener('click', loadBoard);
   document.getElementById('pull-btn').addEventListener('click', handlePull);
   document.getElementById('push-btn').addEventListener('click', showPushDialog);
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => {
+      activeSearchQuery = e.target.value.trim().toLowerCase();
+      loadBoard();
+    }, 300);
+  });
+  initAssigneeFilter();
   loadBoard();
 });
