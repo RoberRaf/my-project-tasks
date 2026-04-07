@@ -1,6 +1,6 @@
 ---
 title: "Onboarding Flow"
-status: in-progress
+status: G1 Committed
 claimed_by: RoberRaf
 claimed_at: 2026-04-07T00:00:00Z
 created_by: RoberRaf
