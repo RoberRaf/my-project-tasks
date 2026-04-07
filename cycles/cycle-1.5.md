@@ -3,8 +3,6 @@ title: Onboarding Flow
 status: Running
 claimed_by: SaraQA
 claimed_at: '2026-04-07T07:06:36.230Z'
-created_by: RoberRaf
-created_at: 2026-04-07T00:00:00.000Z
 ---
 
 # Cycle 1.5 — Onboarding Flow
