@@ -36,6 +36,8 @@ function buildTasks() {
       status: normalizeStr(data.status) || 'todo',
       claimed_by: normalizeStr(data.claimed_by),
       claimed_at: normalizeStr(data.claimed_at),
+      created_by: normalizeStr(data.created_by),
+      created_at: normalizeStr(data.created_at),
       body
     };
   });
@@ -53,6 +55,8 @@ function buildCycles() {
       mode: normalizeStr(data.mode) || 'OUTCOME',
       claimed_by: normalizeStr(data.claimed_by),
       claimed_at: normalizeStr(data.claimed_at),
+      created_by: normalizeStr(data.created_by),
+      created_at: normalizeStr(data.created_at),
       killCondition: extractBodyField(body, 'Kill Condition'),
       targetMetric: extractBodyField(body, 'Target Metric'),
       body
