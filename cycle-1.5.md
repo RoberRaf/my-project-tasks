@@ -1,0 +1,20 @@
+---
+title: "Onboarding Flow"
+status: in-progress
+claimed_by: RoberRaf
+claimed_at: 2026-04-07T00:00:00Z
+created_by: RoberRaf
+created_at: 2026-04-07T00:00:00Z
+---
+
+# Cycle 1.5 — Onboarding Flow
+
+Build the complete onboarding flow that ties together the individual onboarding screens into a navigable, multi-step experience.
+
+## Tasks
+
+- [ ] **PageView/Swipe Navigation** — Implement horizontal swipe or page-based navigation between onboarding steps
+- [ ] **Progress Indicator** — Add a dot indicator or progress bar showing the current step
+- [ ] **Skip & Next Controls** — Provide "Skip" and "Next" buttons for navigating between steps
+- [ ] **Completion Action** — Handle the final step with a "Get Started" button that navigates to the main app
+- [ ] **Persistence** — Store a flag so the onboarding is only shown on first launch
