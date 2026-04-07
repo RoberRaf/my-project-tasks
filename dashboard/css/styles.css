@@ -704,6 +704,75 @@ body {
   margin: 12px 0;
 }
 
+/* History button & dialog */
+.history-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  background: #f0f4ff;
+  color: #4361ee;
+  border: 1px solid #d0d9f5;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.history-btn:hover {
+  background: #e0e8ff;
+  border-color: #4361ee;
+}
+
+.history-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease;
+}
+
+.history-dialog {
+  background: #fff;
+  border-radius: 12px;
+  width: 480px;
+  max-width: 90vw;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  padding: 24px;
+}
+
+.history-subtitle {
+  font-size: 0.82rem;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-entry {
+  padding: 10px 12px;
+  border-left: 3px solid #4361ee;
+  margin-bottom: 8px;
+  background: #f8f9fc;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #444;
+}
+
+.history-entry strong {
+  color: #1a1a2e;
+}
+
 /* Read-only / static mode */
 .readonly-banner {
   display: none;

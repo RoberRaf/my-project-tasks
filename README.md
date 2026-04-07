@@ -117,4 +117,4 @@ Task description goes here.
 
 **Task statuses:** `todo`, `in-progress`, `done`, `blocked`
 
-**Cycle statuses:** `proposed`, `G1 Committed`, `Running`, `G2 Pulse`, `G3 Resolve`, `Killed`, `Done`
+**Cycle statuses:** `proposed`, `g1-committed`, `running`, `g2-pulse`, `g3-resolve`, `killed`, `done`

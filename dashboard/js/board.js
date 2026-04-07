@@ -412,6 +412,16 @@ function showDetailDialog(item, config, developers) {
   assigneeSection.appendChild(assigneeControl);
   dialog.appendChild(assigneeSection);
 
+  // History button
+  const historyLines = extractHistory(item.body);
+  if (historyLines.length > 0) {
+    const historyBtn = document.createElement('button');
+    historyBtn.className = 'history-btn';
+    historyBtn.textContent = `View History (${historyLines.length})`;
+    historyBtn.addEventListener('click', () => showHistoryDialog(item.title, historyLines));
+    dialog.appendChild(historyBtn);
+  }
+
   // Body content (rendered as markdown)
   if (item.body && item.body.trim()) {
     const bodySection = document.createElement('div');
@@ -438,6 +448,58 @@ function showDetailDialog(item, config, developers) {
   document.addEventListener('keydown', function onEsc(e) {
     if (e.key === 'Escape') {
       closeDialog();
+      document.removeEventListener('keydown', onEsc);
+    }
+  });
+}
+
+function extractHistory(body) {
+  if (!body) return [];
+  const historyMatch = body.match(/## History\r?\n([\s\S]*?)(?:\n##\s|$)/);
+  if (!historyMatch) return [];
+  return historyMatch[1]
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => l.startsWith('- '));
+}
+
+function showHistoryDialog(title, historyLines) {
+  document.querySelectorAll('.history-overlay').forEach(d => d.remove());
+
+  const overlay = document.createElement('div');
+  overlay.className = 'history-overlay';
+
+  const dialog = document.createElement('div');
+  dialog.className = 'history-dialog';
+
+  const entriesHtml = historyLines.map(line => {
+    const text = line.replace(/^- /, '');
+    const rendered = typeof marked !== 'undefined'
+      ? marked.parseInline(text)
+      : escapeHtml(text);
+    return `<li class="history-entry">${rendered}</li>`;
+  }).join('');
+
+  dialog.innerHTML = `
+    <div class="detail-header">
+      <h2 class="detail-title">History</h2>
+      <button class="detail-close">&times;</button>
+    </div>
+    <div class="history-subtitle">${escapeHtml(title)}</div>
+    <ul class="history-list">${entriesHtml}</ul>
+  `;
+
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+
+  const closeHistory = () => overlay.remove();
+  dialog.querySelector('.detail-close').addEventListener('click', closeHistory);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeHistory();
+  });
+  document.addEventListener('keydown', function onEsc(e) {
+    if (e.key === 'Escape') {
+      closeHistory();
       document.removeEventListener('keydown', onEsc);
     }
   });

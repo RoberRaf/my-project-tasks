@@ -23,13 +23,13 @@ const CYCLES_CONFIG = {
   mode: 'cycles',
   apiBase: '/api/cycles',
   columns: [
-    { id: 'Proposed', label: 'Proposed', color: '#9E9E9E' },
-    { id: 'G1 Committed', label: 'G1 Committed', color: '#2196F3' },
-    { id: 'Running', label: 'Running', color: '#3F51B5' },
-    { id: 'G2 Pulse', label: 'G2 Pulse', color: '#FFC107' },
-    { id: 'G3 Resolve', label: 'G3 Resolve', color: '#FF9800' },
-    { id: 'Killed', label: 'Killed', color: '#F44336' },
-    { id: 'Done', label: 'Done', color: '#4CAF50' }
+    { id: 'proposed', label: 'Proposed', color: '#9E9E9E' },
+    { id: 'g1-committed', label: 'G1 Committed', color: '#2196F3' },
+    { id: 'running', label: 'Running', color: '#3F51B5' },
+    { id: 'g2-pulse', label: 'G2 Pulse', color: '#FFC107' },
+    { id: 'g3-resolve', label: 'G3 Resolve', color: '#FF9800' },
+    { id: 'killed', label: 'Killed', color: '#F44336' },
+    { id: 'done', label: 'Done', color: '#4CAF50' }
   ],
   statusKey: 'status'
 };
